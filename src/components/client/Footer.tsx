@@ -72,37 +72,6 @@ export default function Footer() {
                 transformational space where lives are changed through powerful
                 encounters with God's presence and Word.
               </p>
-
-              {/* Download App */}
-              {/* <div className="pt-4">
-                <h4 className="font-heading text-base font-bold tracking-tight mb-4">
-                  DOWNLOAD OUR APP
-                </h4>
-                <div className="flex flex-wrap gap-3">
-                  <a
-                    href="#"
-                    className="inline-block hover:opacity-80 transition-opacity"
-                    aria-label="Download on App Store"
-                  >
-                    <img
-                      src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                      alt="Download on App Store"
-                      className="h-10"
-                    />
-                  </a>
-                  <a
-                    href="#"
-                    className="inline-block hover:opacity-80 transition-opacity"
-                    aria-label="Get it on Google Play"
-                  >
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
-                      alt="Get it on Google Play"
-                      className="h-10"
-                    />
-                  </a>
-                </div>
-              </div> */}
             </div>
 
             {/* Quick Links */}
@@ -129,26 +98,10 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="/contact"
-                    className="text-white/80 hover:text-brand-secondary transition-colors"
-                  >
-                    Contact Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     href="/ministries"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Ministries
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/blog"
-                    className="text-white/80 hover:text-brand-secondary transition-colors"
-                  >
-                    Our Blog
                   </Link>
                 </li>
               </ul>
@@ -162,7 +115,7 @@ export default function Footer() {
               <ul className="space-y-3 font-sans text-sm">
                 <li>
                   <Link
-                    href="/sermons"
+                    href="#"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Watch Sermons
@@ -194,10 +147,10 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="/ministries"
+                    href="#"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
-                    Join A Small Group
+                    Join Our WhatsApp Channel
                   </Link>
                 </li>
                 <li>
@@ -219,7 +172,7 @@ export default function Footer() {
               <ul className="space-y-3 font-sans text-sm mb-6">
                 <li>
                   <Link
-                    href="/privacy"
+                    href="#"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Privacy Policy
@@ -227,7 +180,7 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="/terms"
+                    href="#"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Terms of Service
@@ -235,7 +188,7 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="/cookies"
+                    href="#"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Cookie Policy
@@ -285,14 +238,6 @@ export default function Footer() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-8">
               {/* Logo */}
               <Link href="/" className="flex items-center space-x-3">
-                {/* <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-brand-primary to-brand-primary-dark rounded-2xl flex items-center justify-center shadow-lg">
-                    <span className="text-white font-heading text-xl font-bold">
-                      G
-                    </span>
-                  </div>
-                  <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-brand-secondary rounded-full border-2 border-brand-dark"></div>
-                </div> */}
                 <div>
                   <div className="font-heading text-2xl font-bold tracking-tight text-white">
                     GOSPEL

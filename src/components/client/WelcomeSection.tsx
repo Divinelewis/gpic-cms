@@ -1,8 +1,11 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
 export default function WelcomeSection() {
+  const router = useRouter();
+
   return (
     <section className="bg-brand-sky py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20">
@@ -38,11 +41,10 @@ export default function WelcomeSection() {
           {/* RIGHT SIDE BUTTON */}
           <div className="flex md:justify-end">
             <button
-              className="border border-dark text-dark font-sans px-10 py-4 
-              uppercase tracking-wider text-sm 
-              hover:bg-dark hover:text-light transition-all duration-300"
+              onClick={() => router.push("/about")}
+              className="px-6 py-3 border border-brand-dark text-brand-dark text-sm font-sans hover:bg-brand-dark hover:text-white transition-all duration-300"
             >
-              Learn More
+              LEARN MORE
             </button>
           </div>
         </motion.div>

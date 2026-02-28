@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const slides = [
   {
@@ -34,6 +35,8 @@ const slides = [
 ];
 
 export default function HeroSlider() {
+  const router = useRouter();
+
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -111,6 +114,7 @@ export default function HeroSlider() {
               {/* Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
                 <button
+                  onClick={() => router.push("/live")}
                   className="bg-brand-light text-brand-primary font-semibold px-8 py-3 rounded-full 
                   hover:bg-brand-cream transition-all duration-300"
                 >
@@ -118,10 +122,11 @@ export default function HeroSlider() {
                 </button>
 
                 <button
+                  onClick={() => router.push("/ministries")}
                   className="border border-white text-white px-8 py-3 rounded-full 
                   hover:bg-white hover:text-brand-primary transition-all duration-300"
                 >
-                  QUICK LINKS
+                  VISIT US
                 </button>
               </div>
             </div>
