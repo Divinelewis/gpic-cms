@@ -29,7 +29,7 @@ export default function WelcomeSection() {
             </h2>
 
             {/* Paragraph */}
-            <p className="font-sans text-dark-light text-base md:text-lg leading-relaxed max-w-xl">
+            <p className="font-sans text-dark-light text-sm md:text-base leading-relaxed max-w-xl">
               At Gospel Power International Church, we are passionate about
               transforming lives through the power of God’s Word. Whether you
               join us in person or online, we are dedicated to raising a

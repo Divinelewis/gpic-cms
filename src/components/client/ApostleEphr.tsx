@@ -51,19 +51,19 @@ export default function PastorSection() {
             </div>
 
             {/* Section Label */}
-            <p className="font-sans uppercase tracking-[0.4em] text-secondary text-sm">
+            <p className="font-sans uppercase tracking-[0.4em] text-secondary text-xs">
               Our Lead Pastor
             </p>
 
             {/* Pastor Name */}
-            <h2 className="font-heading font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight">
+            <h2 className="font-heading font-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight">
               Apostle Ephraim Nwachukwu
             </h2>
 
             {/* Description */}
-            <p className="font-sans text-light/80 text-base md:text-lg leading-relaxed max-w-xl">
+            <p className="font-sans text-light/80 text-sm md:text-base leading-relaxed max-w-xl">
               Apostle Ephraim Nwachukwu is the visionary leader of
-              <span className="text-secondary">
+              <span className="font-bold">
                 {" "}
                 Gospel Power International Church
               </span>

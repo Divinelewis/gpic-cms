@@ -5,7 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-const events = [{ id: 1, image: "/images/flier1.jpg" }];
+const events = [
+  { id: 1, image: "/images/flier1.jpg" },
+  { id: 2, image: "/images/flier2.png" },
+];
 
 const slides = events.length > 0 ? events : [{ id: 0, image: null }];
 
@@ -48,24 +51,10 @@ export default function UpcomingEvents() {
               Join Our Services and Programs
             </h2>
 
-            <p className="font-sans text-dark-light text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
+            <p className="font-sans text-dark-light text-sm md:text-base leading-relaxed max-w-xl mx-auto lg:mx-0">
               Find out God’s plan for you. Experience Him uniquely. Stay
               connected with all our upcoming programs and special services.
             </p>
-
-            {/* <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
-              <Link href="/events">
-                <button className="border border-dark text-dark font-sans px-10 py-4 uppercase tracking-wider text-sm hover:bg-dark hover:text-light transition-all duration-300">
-                  View Events
-                </button>
-              </Link>
-
-              <Link href="/livestream">
-                <button className="bg-dark text-light font-sans px-10 py-4 uppercase tracking-wider text-sm hover:opacity-90 transition-all duration-300">
-                  Livestream
-                </button>
-              </Link>
-            </div> */}
           </div>
 
           {/* RIGHT FLIER SLIDER */}

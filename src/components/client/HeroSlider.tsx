@@ -75,47 +75,47 @@ export default function HeroSlider() {
 
           {/* Content */}
           <div className="relative z-10 h-full flex items-center justify-center text-center px-6 pointer-events-auto">
-            <div className="max-w-6xl mx-auto space-y-6 md:space-y-8">
+            <div className="max-w-6xl mx-auto space-y-6 md:space-y-5">
               {/* Badge */}
               <div className="flex justify-center">
                 <span
-                  className="font-sans text-xs md:text-sm tracking-[0.35em] uppercase 
+                  className="font-sans text-[8px] md:text-sm tracking-[0.10em] uppercase 
                   bg-white/10 backdrop-blur-sm text-white 
-                  px-6 py-2 rounded-full border border-white/20"
+                  px-5 py-1.5 rounded-full border border-white/20"
                 >
                   {slides[currentSlide].badge}
                 </span>
               </div>
 
               {/* Main Heading */}
-              <div className="space-y-1 md:space-y-3">
+              <div className="space-y-1 md:space-y-1">
                 <h1
                   className="font-heading font-black uppercase text-white tracking-tight
-                  text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight"
+                  text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight"
                 >
                   {slides[currentSlide].line1}
                 </h1>
 
                 <h1
                   className="font-heading font-black uppercase text-white tracking-tight
-                  text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight"
+                  text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight"
                 >
                   {slides[currentSlide].line2}
                 </h1>
 
                 <h1
                   className="font-heading font-black uppercase text-brand-primary-light tracking-tight
-                  text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight"
+                  text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl leading-tight"
                 >
                   {slides[currentSlide].highlight}
                 </h1>
               </div>
 
               {/* Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center pt-6">
                 <button
                   onClick={() => router.push("/live")}
-                  className="bg-brand-light text-brand-primary font-semibold px-8 py-3 rounded-full 
+                  className="bg-brand-light text-brand-primary font-semibold text-sm px-5 py-2 rounded-full 
                   hover:bg-brand-cream transition-all duration-300"
                 >
                   WATCH LIVE
@@ -123,7 +123,7 @@ export default function HeroSlider() {
 
                 <button
                   onClick={() => router.push("/ministries")}
-                  className="border border-white text-white px-8 py-3 rounded-full 
+                  className="border border-white text-white text-sm px-5 py-2 rounded-full
                   hover:bg-white hover:text-brand-primary transition-all duration-300"
                 >
                   VISIT US
@@ -137,20 +137,20 @@ export default function HeroSlider() {
       {/* Desktop Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute z-20 left-8 top-1/2 -translate-y-1/2 
-        p-3 bg-white/10 backdrop-blur-sm text-white rounded-full
+        className="absolute z-20 left-4 top-1/2 -translate-y-1/2
+        p-1.5 bg-white/10 backdrop-blur-sm text-white rounded-full
         hover:bg-white/20 transition"
       >
-        <ChevronLeft size={28} />
+        <ChevronLeft size={18} />
       </button>
 
       <button
         onClick={nextSlide}
-        className="absolute z-20 right-8 top-1/2 -translate-y-1/2 
-        p-3 bg-white/10 backdrop-blur-sm text-white rounded-full
+        className="absolute z-20 right-4 top-1/2 -translate-y-1/2
+        p-1.5 bg-white/10 backdrop-blur-sm text-white rounded-full
         hover:bg-white/20 transition"
       >
-        <ChevronRight size={28} />
+        <ChevronRight size={18} />
       </button>
 
       {/* Indicators */}

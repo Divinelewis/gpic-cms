@@ -38,16 +38,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20 md:h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
-            {/* <div className="relative">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-brand-primary to-brand-primary-dark rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 shadow-lg">
-                <span className="text-white font-heading text-xl md:text-2xl font-bold">
-                  GPIC
-                </span>
-              </div>
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-brand-secondary rounded-full border-2 border-white shadow-md"></div>
-            </div> */}
-
-            <Image src={Logo} alt="Church Logo" width={70} height={70} />
+            <Image src={Logo} alt="Church Logo" width={60} height={60} />
             <div className="hidden sm:block">
               {/* <Image src={Logo} alt="Church Logo" width={50} height={50} /> */}
               <div className="font-heading text-xl md:text-2xl font-bold text-brand-primary">
@@ -65,7 +56,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="relative font-sans text-base font-bold text-brand-dark hover:text-brand-primary transition-colors duration-200 group tracking-wide"
+                className="relative font-sans text-xs font-bold text-brand-dark hover:text-brand-primary transition-colors duration-200 group tracking-wide"
               >
                 {link.name}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-secondary group-hover:w-full transition-all duration-300"></span>
