@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     console.log("Login attempt:", email);
 
     if (!process.env.JWT_SECRET) {
-      console.error("🔥 LOGIN ERROR: JWT_SECRET not defined");
+      console.error("LOGIN ERROR: JWT_SECRET not defined");
       return NextResponse.json(
         { message: "Server configuration error" },
         { status: 500 },
@@ -60,7 +60,7 @@ export async function POST(req: Request) {
 
     return response;
   } catch (error) {
-    console.error("🔥 LOGIN ERROR:", error);
+    console.error("LOGIN ERROR:", error);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
