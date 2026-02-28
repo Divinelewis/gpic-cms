@@ -96,7 +96,7 @@ export default function Navbar() {
                   <Link
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block font-sans text-base font-bold text-brand-dark hover:text-brand-primary transition-colors py-2 border-b border-brand-primary/10"
+                    className="block font-sans text-sm font-bold text-brand-dark hover:text-brand-primary transition-colors py-2 border-b border-brand-primary/10"
                   >
                     {link.name}
                   </Link>

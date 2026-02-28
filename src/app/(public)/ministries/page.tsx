@@ -68,23 +68,23 @@ export default function MinistriesPage() {
             transition={{ duration: 0.6 }}
             className="text-white text-xs font-bold tracking-widest uppercase mb-8"
           >
-            ● WE ARE SPREADING GLOBALLY
+            ● MINISTRIES
           </motion.p>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-heading text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight mb-4"
+            className="font-heading font-black text-white leading-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
           >
-            RAISING JOYFUL DISCIPLES,
+            RAISING DISCIPLES,
           </motion.h1>
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="font-heading text-4xl md:text-6xl lg:text-7xl font-black text-brand-primary-light leading-tight mb-8"
+            className="font-heading font-black text-brand-primary-light leading-tight mb-8 text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
           >
             FOR CHRIST.
           </motion.h2>
@@ -93,7 +93,7 @@ export default function MinistriesPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="text-white text-lg mb-8"
+            className="text-white text-base mb-8"
           >
             Join us at a Gospel Power Church near you
           </motion.p>
@@ -109,7 +109,7 @@ export default function MinistriesPage() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="font-heading text-4xl md:text-5xl font-black text-center text-brand-dark mb-12"
+            className="font-heading font-black text-center text-brand-dark mb-12 text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
           >
             VISIT GOSPEL POWER CHURCH
           </motion.h2>

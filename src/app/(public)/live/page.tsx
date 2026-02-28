@@ -36,7 +36,7 @@ export default function LivePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="font-heading text-5xl md:text-7xl font-black text-white mb-6 leading-tight"
+            className="font-heading font-black text-white mb-6 leading-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
           >
             WATCH LIVE
           </motion.h1>
@@ -45,7 +45,7 @@ export default function LivePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-white/90 text-lg md:text-xl max-w-2xl mx-auto"
+            className="text-white/90 text-base md:text-lg max-w-2xl mx-auto"
           >
             Experience church from anywhere. Join us live for worship, teaching,
             and fellowship.
