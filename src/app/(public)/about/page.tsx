@@ -184,8 +184,6 @@ export default function AboutPage() {
                 GLOBAL REACH
               </h3>
               <p className="text-brand-dark-light text-sm leading-relaxed mb-8">
-                With over 27 expressions across the globe, including Nigeria,
-                the United States, Canada, the United Kingdom, and South Africa,
                 Gospel Power International Church is committed to expanding
                 God&apos;s Kingdom and creating a community of believers who
                 will change their world.
