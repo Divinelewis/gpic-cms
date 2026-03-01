@@ -28,7 +28,7 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="text-white text-xs font-bold tracking-widest uppercase mb-8"
           >
-            ● ABOUT US
+            • ABOUT US
           </motion.p>
 
           <motion.h1

@@ -68,7 +68,7 @@ export default function MinistriesPage() {
             transition={{ duration: 0.6 }}
             className="text-white text-xs font-bold tracking-widest uppercase mb-8"
           >
-            ● MINISTRIES
+            • MINISTRIES
           </motion.p>
 
           <motion.h1
