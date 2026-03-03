@@ -20,22 +20,22 @@ const campuses: Campus[] = [
     name: "GPIC Port Harcourt",
     location: "Rivers State",
     address: "Okemini Sars Road, Rumuaghorlu",
-    serviceTimes: ["Sunday 7:30am", "Wednesday 6pm WAT"],
+    serviceTimes: ["Sunday 7:00am", "Wednesday 6pm WAT"],
     image: "images/gpicph.jpg",
     country: "NIGERIA",
   },
-  {
-    id: 2,
-    name: "GPIC Bayelsa",
-    location: "Bayelsa",
-    address: "",
-    serviceTimes: ["Sunday 9:00am", "Wednesday 6pm WAT"],
-    image: "images/gpicph.jpg",
-    country: "NIGERIA",
-  },
+  // {
+  //   id: 2,
+  //   name: "GPIC Bayelsa",
+  //   location: "Bayelsa",
+  //   address: "",
+  //   serviceTimes: ["Sunday 9:00am", "Wednesday 6pm WAT"],
+  //   image: "images/gpicph.jpg",
+  //   country: "NIGERIA",
+  // },
 ];
 
-const countries = [{ name: "NIGERIA", count: 2, flag: "🇳🇬" }];
+const countries = [{ name: "NIGERIA", count: 1, flag: "🇳🇬" }];
 
 export default function MinistriesPage() {
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
