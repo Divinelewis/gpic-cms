@@ -88,7 +88,7 @@ export default function ImageCarousel() {
             </div>
           </div>
 
-          <h2 className="font-heading font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-dark leading-tight">
+          <h2 className="font-heading font-black text-3xl py-4 sm:text-4xl md:text-5xl lg:text-6xl text-dark leading-tight">
             Moments in Church
           </h2>
           <p className="font-sans text-dark-light text-sm md:text-base leading-relaxed max-w-xl mx-auto">
