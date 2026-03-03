@@ -89,7 +89,7 @@ export default function ImageCarousel() {
           </div>
 
           <h2 className="font-heading font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-dark leading-tight">
-            MOMENTS OF WORSHIP
+            MOMENTS IN CHURCH
           </h2>
           <p className="font-sans text-dark-light text-sm md:text-base leading-relaxed max-w-xl mx-auto">
             Capturing the joy, power, and presence of God in our gatherings
