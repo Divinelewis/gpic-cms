@@ -6,8 +6,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 const events = [
-  { id: 1, image: "/images/flier1.jpg" },
-  { id: 2, image: "/images/flier2.png" },
+  { id: 1, image: "" },
+  { id: 2, image: "" },
 ];
 
 const slides = events.length > 0 ? events : [{ id: 0, image: null }];
