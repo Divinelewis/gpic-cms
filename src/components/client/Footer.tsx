@@ -190,7 +190,7 @@ export default function Footer() {
               <ul className="space-y-3 font-sans text-sm">
                 <li>
                   <Link
-                    href="#"
+                    href="live"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Watch Sermons
@@ -214,7 +214,7 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="/events"
+                    href="#"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Upcoming Programs
