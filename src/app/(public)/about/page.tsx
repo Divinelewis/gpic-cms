@@ -258,7 +258,7 @@ export default function AboutPage() {
                 </h3>
                 <p className="text-brand-dark-light text-sm leading-relaxed">
                   Our foundation is built on fervent and consistent prayer,
-                  which has birthed the NSPPD movement.
+                  which has birthed the GPIC movement.
                 </p>
               </div>
 

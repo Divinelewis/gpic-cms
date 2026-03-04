@@ -13,12 +13,60 @@ import {
 
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [message, setMessage] = useState("");
+  const [emailError, setEmailError] = useState("");
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const isValidEmail = (value: string) => {
+    // Strict check: must have characters before @, a domain, a dot, and a TLD
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value.trim());
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (value && !isValidEmail(value)) {
+      setEmailError("Please enter a valid email address.");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add newsletter subscription logic here
-    console.log("Subscribing email:", email);
-    setEmail("");
+
+    if (!isValidEmail(email)) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
+
+    setStatus("loading");
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setStatus("success");
+        setMessage(data.message || "You're subscribed!");
+        setEmail("");
+        setEmailError("");
+      } else {
+        setStatus("error");
+        setMessage(data.error || "Something went wrong.");
+      }
+    } catch (err) {
+      setStatus("error");
+      setMessage("Network error. Please try again.");
+    }
   };
 
   return (
@@ -37,18 +85,45 @@ export default function Footer() {
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleEmailChange}
                 placeholder="Your Email"
                 required
-                className="flex-1 px-6 py-4 bg-white/5 border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:border-brand-secondary transition-colors rounded-l-lg sm:rounded-r-none rounded-r-lg sm:rounded-l-lg"
+                disabled={status === "loading"}
+                className={`w-full px-6 py-4 bg-white/5 border text-white placeholder:text-white/50 focus:outline-none transition-colors rounded-l-lg sm:rounded-r-none rounded-r-lg sm:rounded-l-lg disabled:opacity-50
+          ${emailError ? "border-red-400" : "border-white/20 focus:border-brand-secondary"}`}
               />
+              {emailError && (
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 text-lg">
+                  ✕
+                </span>
+              )}
+              {email && !emailError && (
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-400 text-lg">
+                  ✓
+                </span>
+              )}
               <button
                 type="submit"
                 className="px-8 py-4 bg-brand-secondary text-white font-sans font-bold text-sm tracking-wider uppercase hover:bg-brand-secondary-dark transition-colors rounded-r-lg sm:rounded-l-none rounded-l-lg sm:rounded-r-lg"
               >
-                SUBSCRIBE
+                {status === "loading" ? "SUBSCRIBING..." : "SUBSCRIBE"}
               </button>
             </form>
+
+            {emailError && (
+              <p className="mt-2 text-xs text-red-400 font-sans">
+                {emailError}
+              </p>
+            )}
+
+            {status === "success" && (
+              <p className="mt-4 text-sm font-sans text-green-400">
+                ✓ {message}
+              </p>
+            )}
+            {status === "error" && (
+              <p className="mt-4 text-sm font-sans text-red-400">✕ {message}</p>
+            )}
             <p className="mt-6 text-xs text-white/60 leading-relaxed font-sans">
               By subscribing to GPIC's Newsletter you consent to receive
               recurring automated messages via email.
