@@ -1,14 +1,59 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
 
-const MemberSchema = new mongoose.Schema(
+const MemberSchema = new Schema(
   {
-    serialNumber: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
-    phone: { type: String, required: true },
-    address: { type: String },
-    email: { type: String },
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    otherName: {
+      type: String,
+      trim: true,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
+    },
+    address: {
+      type: String,
+    },
+    dateOfBirth: {
+      type: Date,
+    },
+    gender: {
+      type: String,
+      enum: ["MALE", "FEMALE"],
+      required: true,
+    },
+    membershipDate: {
+      type: Date,
+      default: Date.now,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    notes: {
+      type: String,
+    },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+  },
 );
 
-export default mongoose.models.Member || mongoose.model("Member", MemberSchema);
+const Member = models.Member || model("Member", MemberSchema);
+
+export default Member;
