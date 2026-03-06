@@ -18,20 +18,15 @@ interface SMSResponse {
  * Termii requires format: 234XXXXXXXXXX (no + sign)
  */
 function formatPhoneNumber(phoneNumber: string): string {
-  // Remove all spaces, dashes, parentheses
   let formatted = phoneNumber.replace(/[\s\-\(\)]/g, "");
 
-  // Remove + if present
   if (formatted.startsWith("+")) {
     formatted = formatted.substring(1);
   }
 
-  // If starts with 0, replace with 234
   if (formatted.startsWith("0")) {
     formatted = "234" + formatted.substring(1);
-  }
-  // If doesn't start with 234, add it
-  else if (!formatted.startsWith("234")) {
+  } else if (!formatted.startsWith("234")) {
     formatted = "234" + formatted;
   }
 
@@ -39,14 +34,13 @@ function formatPhoneNumber(phoneNumber: string): string {
 }
 
 /**
- * Send SMS using Termii (Exact API Format)
+ * Send SMS using Termii
  */
 export async function sendSMS(
   phoneNumber: string,
   message: string,
 ): Promise<SMSResponse> {
   try {
-    // Validate API Key
     if (!TERMII_CONFIG.API_KEY) {
       console.error("Termii API Key not configured");
       return {
@@ -59,7 +53,6 @@ export async function sendSMS(
     const formattedPhone = formatPhoneNumber(phoneNumber);
     console.log(`Sending SMS to: ${formattedPhone}`);
 
-    // Exact format from Termii documentation
     const payload = {
       to: formattedPhone,
       from: TERMII_CONFIG.SENDER_ID,
@@ -88,7 +81,6 @@ export async function sendSMS(
     const data = await response.json();
     console.log("Termii Response:", data);
 
-    // Check if successful
     if (data.message_id || data.code === "ok") {
       return {
         success: true,
@@ -123,7 +115,7 @@ export async function sendSMS(
 }
 
 /**
- * Send Bulk SMS to multiple recipients
+ * Send Bulk SMS
  */
 export async function sendBulkSMS(
   phoneNumbers: string[],
@@ -135,16 +127,16 @@ export async function sendBulkSMS(
 
   console.log(`Starting bulk SMS to ${phoneNumbers.length} recipients`);
 
-  // Termii doesn't support bulk in one call, so send one by one
   for (const phone of phoneNumbers) {
     const result = await sendSMS(phone, message);
+
     if (result.success) {
       sent++;
     } else {
       failed++;
       errors.push(`${phone}: ${result.message}`);
     }
-    // Delay to avoid rate limiting (Termii recommends spacing requests)
+
     await new Promise((resolve) => setTimeout(resolve, 300));
   }
 
@@ -159,7 +151,7 @@ export async function sendBulkSMS(
 }
 
 /**
- * Welcome message for first-time members
+ * Welcome message
  */
 export function getWelcomeMessage(firstName: string): string {
   return `Dear ${firstName},
@@ -172,7 +164,7 @@ God bless you!`;
 }
 
 /**
- * Activity reminder message
+ * Activity reminder
  */
 export function getActivityReminderMessage(
   activityTitle: string,
@@ -194,7 +186,7 @@ Date: ${dateStr}
 Time: ${activityTime}
 Location: ${location}
 
-We can't wait to see you there! 
+We can't wait to see you there!
 
 For more details, contact us via: +23480367515669
 
@@ -202,12 +194,12 @@ God bless!`;
 }
 
 /**
- * Sunday service reminder message
+ * Sunday service reminder
  */
-export function getSundayReminderMessage(firstName: string): string {
+export function getSundayReminderMessage(): string {
   return `GPIC Sunday Service Reminder
 
-Dear ${firstName}, Join us tomorrow for a powerful time in God’s presence.
+Join us tomorrow for a powerful time in God’s presence.
 
 Time: 7:00 AM Prompt
 Location: Church Auditorium, Opp. Highbrow School, Okemini Sars Rd, Rumuaghorlu, Port Harcourt.
