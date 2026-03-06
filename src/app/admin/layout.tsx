@@ -12,6 +12,7 @@ import {
   Settings,
   LogOut,
   Menu,
+  UserPlus,
   X,
   Bell,
   Search,
@@ -47,15 +48,20 @@ export default function AdminLayout({
       icon: LayoutDashboard,
     },
     {
+      name: "Add Members",
+      href: "/admin/members/add",
+      icon: UserPlus,
+    },
+    {
       name: "Members",
       href: "/admin/members",
       icon: Users,
     },
-    // {
-    //   name: "Activities",
-    //   href: "/admin/activities",
-    //   icon: Activity,
-    // },
+    {
+      name: "Activities",
+      href: "/admin/activities",
+      icon: Activity,
+    },
     // {
     //   name: "Settings",
     //   href: "/admin/settings",
@@ -64,10 +70,18 @@ export default function AdminLayout({
   ];
 
   const isActive = (href: string) => {
-    if (href === "/admin") {
-      return pathname === href;
+    if (pathname === href) return true;
+    if (href === "/admin") return false;
+    if (pathname.startsWith(href + "/")) {
+      const moreSpecificMatch = menuItems.find(
+        (item) =>
+          item.href !== href &&
+          item.href.startsWith(href) &&
+          (pathname === item.href || pathname.startsWith(item.href + "/")),
+      );
+      return !moreSpecificMatch;
     }
-    return pathname.startsWith(href);
+    return false;
   };
 
   return (

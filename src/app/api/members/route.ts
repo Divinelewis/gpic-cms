@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Member from "@/models/Member";
+import { sendSMS, getWelcomeMessage } from "@/lib/sms";
 
 // GET all members
 export async function GET(request: NextRequest) {
@@ -66,6 +67,18 @@ export async function POST(request: NextRequest) {
 
     // Create new member
     const member = await Member.create(body);
+
+    // Send welcome SMS ONLY if isFirstTimer is true and SMS hasn't been sent
+    if (member.isFirstTimer && !member.welcomeSmsSent) {
+      const welcomeMessage = getWelcomeMessage(member.firstName);
+      const smsResult = await sendSMS(member.phoneNumber, welcomeMessage);
+
+      if (smsResult.success) {
+        member.welcomeSmsSent = true;
+        member.welcomeSmsSentDate = new Date();
+        await member.save();
+      }
+    }
 
     return NextResponse.json(member, { status: 201 });
   } catch (error: any) {
