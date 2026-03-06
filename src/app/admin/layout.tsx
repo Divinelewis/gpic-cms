@@ -13,6 +13,8 @@ import {
   LogOut,
   Menu,
   UserPlus,
+  CheckSquare,
+  AlertCircle,
   X,
   Bell,
   Search,
@@ -61,6 +63,16 @@ export default function AdminLayout({
       name: "Activities",
       href: "/admin/activities",
       icon: Activity,
+    },
+    {
+      name: "Attendance", // ADD THIS
+      href: "/admin/attendance",
+      icon: CheckSquare, // Import from lucide-react
+    },
+    {
+      name: "Follow-up", // ADD THIS
+      href: "/admin/followup",
+      icon: AlertCircle, // Import from lucide-react
     },
     // {
     //   name: "Settings",
