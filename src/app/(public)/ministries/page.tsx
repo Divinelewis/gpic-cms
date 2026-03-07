@@ -61,7 +61,7 @@ export default function MinistriesPage() {
         <div className="absolute inset-0 bg-black/50"></div>
 
         {/* Content */}
-        <div className="relative z-10 text-center px-6 max-w-5xl">
+        <div className="relative z-10 text-center px-6">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -72,31 +72,30 @@ export default function MinistriesPage() {
           </motion.p>
 
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.8 }}
             className="font-heading font-black text-white leading-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
           >
             RAISING DISCIPLES,
           </motion.h1>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="font-heading font-black text-brand-primary-light leading-tight mb-8 text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="font-heading font-black text-brand-primary-light leading-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
           >
             FOR CHRIST.
-          </motion.h2>
+          </motion.h1>
 
-          <motion.p
+          {/* <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
             className="text-white text-base mb-8"
           >
             Join us at a Gospel Power Church near you
-          </motion.p>
+          </motion.p> */}
         </div>
       </section>
 
