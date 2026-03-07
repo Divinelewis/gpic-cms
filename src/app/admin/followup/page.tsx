@@ -5,13 +5,13 @@ import { Loader, AlertCircle, Phone, CheckCircle, Clock } from "lucide-react";
 
 interface Followup {
   _id: string;
-  memberId: {
+  memberId?: {
     _id: string;
     firstName: string;
     lastName: string;
-    phoneNumber: string;
-    serialNumber: string;
-  };
+    phoneNumber?: string;
+    serialNumber?: string;
+  } | null;
   consecutiveAbsences: number;
   lastAttendedDate?: string;
   followupStatus: string;
@@ -152,9 +152,12 @@ export default function FollowupPage() {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <h3 className="font-bold text-brand-dark text-lg">
-                      {followup.memberId.firstName} {followup.memberId.lastName}
+                      {followup.memberId
+                        ? `${followup.memberId.firstName} ${followup.memberId.lastName}`
+                        : "Member Deleted"}
                     </h3>
-                    {followup.memberId.serialNumber && (
+
+                    {followup.memberId?.serialNumber && (
                       <span className="px-2 py-1 bg-brand-primary/10 text-brand-primary text-xs font-bold rounded">
                         {followup.memberId.serialNumber}
                       </span>
@@ -164,7 +167,7 @@ export default function FollowupPage() {
                   <div className="space-y-1 text-sm">
                     <div className="flex items-center gap-2 text-brand-dark-light">
                       <Phone size={14} />
-                      {followup.memberId.phoneNumber}
+                      {followup.memberId?.phoneNumber || "No phone number"}
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -201,13 +204,15 @@ export default function FollowupPage() {
                     <option value="resolved">Resolved</option>
                   </select>
 
-                  <a
-                    href={`tel:${followup.memberId.phoneNumber}`}
-                    className="flex items-center gap-2 px-4 py-2 bg-brand-accent text-white rounded-lg hover:bg-brand-accent-dark transition-colors font-bold"
-                  >
-                    <Phone size={16} />
-                    <span>Call</span>
-                  </a>
+                  {followup.memberId?.phoneNumber && (
+                    <a
+                      href={`tel:${followup.memberId.phoneNumber}`}
+                      className="flex items-center gap-2 px-4 py-2 bg-brand-accent text-white rounded-lg hover:bg-brand-accent-dark transition-colors font-bold"
+                    >
+                      <Phone size={16} />
+                      <span>Call</span>
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

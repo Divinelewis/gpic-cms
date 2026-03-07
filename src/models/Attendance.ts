@@ -17,6 +17,34 @@ const AttendanceSchema = new Schema(
       ],
       default: "Sunday First Service",
     },
+    // DEMOGRAPHIC BREAKDOWN
+    totalMen: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    totalWomen: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    totalYouths: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    totalChildren: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    totalPeoplePresent: {
+      // Auto-calculated from above
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    // REGISTERED MEMBERS TRACKING
     attendees: [
       {
         memberId: {
@@ -30,12 +58,6 @@ const AttendanceSchema = new Schema(
         },
       },
     ],
-    totalPeoplePresent: {
-      // NEW FIELD - Includes everyone
-      type: Number,
-      required: true,
-      default: 0,
-    },
     totalPresent: {
       // Registered members present
       type: Number,

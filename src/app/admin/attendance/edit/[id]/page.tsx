@@ -1,19 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  Calendar,
-  Users,
-  CheckCircle,
-  XCircle,
-  Loader,
-  TrendingUp,
+  ArrowLeft,
   Save,
+  Loader,
+  CheckCircle,
+  AlertCircle,
   Search,
   UserCheck,
   UserX,
-  Baby,
 } from "lucide-react";
 
 interface Member {
@@ -25,7 +23,15 @@ interface Member {
   isActive: boolean;
 }
 
-export default function AttendancePage() {
+export default function EditAttendancePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const unwrappedParams = use(params);
+  const recordId = unwrappedParams.id;
+  const router = useRouter();
+
   const [members, setMembers] = useState<Member[]>([]);
   const [selectedMembers, setSelectedMembers] = useState<Set<string>>(
     new Set(),
@@ -34,9 +40,10 @@ export default function AttendancePage() {
   const [saving, setSaving] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().split("T")[0],
+    date: "",
     serviceType: "Sunday First Service",
     totalMen: 0,
     totalWomen: 0,
@@ -44,7 +51,6 @@ export default function AttendancePage() {
     totalChildren: 0,
   });
 
-  // Auto-calculate total from demographics
   const totalPeoplePresent =
     formData.totalMen +
     formData.totalWomen +
@@ -52,19 +58,40 @@ export default function AttendancePage() {
     formData.totalChildren;
 
   useEffect(() => {
-    fetchMembers();
-  }, []);
+    fetchData();
+  }, [recordId]);
 
-  const fetchMembers = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/members");
-      if (!response.ok) throw new Error("Failed to fetch members");
 
-      const data = await response.json();
-      setMembers(data.filter((m: Member) => m.isActive));
-    } catch (error) {
-      console.error("Error fetching members:", error);
+      // Fetch attendance record
+      const recordResponse = await fetch(`/api/attendance/${recordId}`);
+      if (!recordResponse.ok) throw new Error("Failed to fetch record");
+
+      const record = await recordResponse.json();
+
+      setFormData({
+        date: new Date(record.date).toISOString().split("T")[0],
+        serviceType: record.serviceType,
+        totalMen: record.totalMen || 0,
+        totalWomen: record.totalWomen || 0,
+        totalYouths: record.totalYouths || 0,
+        totalChildren: record.totalChildren || 0,
+      });
+
+      // Set selected members
+      const attendeeIds = record.attendees.map((a: any) => a.memberId._id);
+      setSelectedMembers(new Set(attendeeIds));
+
+      // Fetch all members
+      const membersResponse = await fetch("/api/members");
+      if (!membersResponse.ok) throw new Error("Failed to fetch members");
+
+      const allMembers = await membersResponse.json();
+      setMembers(allMembers.filter((m: Member) => m.isActive));
+    } catch (err: any) {
+      setError(err.message || "Failed to load data");
     } finally {
       setLoading(false);
     }
@@ -91,13 +118,11 @@ export default function AttendancePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation: Total people must be > 0
     if (totalPeoplePresent === 0) {
       alert("Please enter attendance count for at least one category");
       return;
     }
 
-    // Validation: Total people must be >= registered members present
     if (totalPeoplePresent < selectedMembers.size) {
       alert(
         `Total people present (${totalPeoplePresent}) cannot be less than registered members checked (${selectedMembers.size})`,
@@ -108,8 +133,8 @@ export default function AttendancePage() {
     setSaving(true);
 
     try {
-      const response = await fetch("/api/attendance", {
-        method: "POST",
+      const response = await fetch(`/api/attendance/${recordId}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           date: formData.date,
@@ -120,25 +145,17 @@ export default function AttendancePage() {
           totalChildren: formData.totalChildren,
           totalPeoplePresent: totalPeoplePresent,
           attendeeIds: Array.from(selectedMembers),
-          recordedBy: "Admin User",
         }),
       });
 
-      if (!response.ok) throw new Error("Failed to save attendance");
+      if (!response.ok) throw new Error("Failed to update attendance");
 
       setSuccess(true);
-      setSelectedMembers(new Set());
-      setFormData({
-        ...formData,
-        totalMen: 0,
-        totalWomen: 0,
-        totalYouths: 0,
-        totalChildren: 0,
-      });
-
-      setTimeout(() => setSuccess(false), 3000);
+      setTimeout(() => {
+        router.push("/admin/attendance/history");
+      }, 1500);
     } catch (error) {
-      alert("Failed to save attendance. Please try again.");
+      alert("Failed to update attendance. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -153,7 +170,6 @@ export default function AttendancePage() {
 
   const registeredPresent = selectedMembers.size;
   const registeredAbsent = members.length - selectedMembers.size;
-  const nonRegisteredCount = totalPeoplePresent - registeredPresent;
 
   if (loading) {
     return (
@@ -163,34 +179,44 @@ export default function AttendancePage() {
     );
   }
 
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center max-w-md">
+          <AlertCircle className="mx-auto mb-4 text-red-600" size={48} />
+          <h2 className="font-heading text-2xl font-black text-brand-dark mb-2">
+            Error Loading Record
+          </h2>
+          <p className="text-brand-dark-light mb-4">{error}</p>
+          <Link
+            href="/admin/attendance/history"
+            className="inline-block px-6 py-3 bg-brand-primary text-white font-bold rounded-lg hover:bg-brand-primary-dark transition-colors"
+          >
+            Back to History
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="font-heading text-3xl font-black text-brand-primary">
-            Mark Attendance
-          </h1>
-          <p className="text-brand-dark-light mt-1">
-            Record who attended service today
-          </p>
-        </div>
+      <div>
+        <Link
+          href="/admin/attendance/history"
+          className="inline-flex items-center gap-2 text-brand-primary hover:text-brand-primary-dark font-bold mb-4"
+        >
+          <ArrowLeft size={20} />
+          Back to History
+        </Link>
 
-        <div className="flex gap-3">
-          <Link
-            href="/admin/attendance/history"
-            className="px-6 py-3 border-2 border-brand-primary text-brand-primary font-bold rounded-lg hover:bg-brand-primary hover:text-white transition-colors"
-          >
-            View History
-          </Link>
-          <Link
-            href="/admin/attendance/stats"
-            className="flex items-center gap-2 px-6 py-3 bg-brand-accent text-white font-bold rounded-lg hover:bg-brand-accent-dark transition-colors"
-          >
-            <TrendingUp size={20} />
-            Statistics
-          </Link>
-        </div>
+        <h1 className="font-heading text-3xl font-black text-brand-primary">
+          Edit Attendance Record
+        </h1>
+        <p className="text-brand-dark-light mt-1">
+          Update attendance information
+        </p>
       </div>
 
       {/* Success Message */}
@@ -198,13 +224,12 @@ export default function AttendancePage() {
         <div className="p-4 bg-brand-accent/10 border border-brand-accent rounded-lg flex items-center gap-3 animate-fade-in">
           <CheckCircle className="text-brand-accent" size={24} />
           <p className="text-brand-accent font-bold">
-            Attendance saved successfully! Follow-up messages sent to absent
-            members.
+            Attendance updated successfully! Redirecting...
           </p>
         </div>
       )}
 
-      {/* Stats Cards - SIMPLIFIED */}
+      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl shadow-sm p-6 border-l-4 border-brand-accent">
           <div className="flex items-start justify-between">
@@ -215,9 +240,6 @@ export default function AttendancePage() {
               <h3 className="text-3xl font-black text-brand-accent mt-2">
                 {registeredPresent}
               </h3>
-              <p className="text-xs text-brand-dark-light mt-1">
-                Members checked in today
-              </p>
             </div>
             <UserCheck className="text-brand-accent" size={24} />
           </div>
@@ -232,9 +254,6 @@ export default function AttendancePage() {
               <h3 className="text-3xl font-black text-red-600 mt-2">
                 {registeredAbsent}
               </h3>
-              <p className="text-xs text-brand-dark-light mt-1">
-                Will receive follow-up SMS
-              </p>
             </div>
             <UserX className="text-red-600" size={24} />
           </div>
@@ -277,7 +296,12 @@ export default function AttendancePage() {
                 required
                 className="w-full px-4 py-3 border-2 border-brand-sky rounded-lg focus:outline-none focus:border-brand-primary"
               >
-                <option value="Sunday First Service">Sunday Service</option>
+                <option value="Sunday First Service">
+                  Sunday First Service (8:00 AM)
+                </option>
+                <option value="Sunday Second Service">
+                  Sunday Second Service (10:30 AM)
+                </option>
                 <option value="Wednesday">Wednesday Bible Study</option>
                 <option value="Friday">Friday Prayer Night</option>
                 <option value="Special Event">Special Event</option>
@@ -286,21 +310,14 @@ export default function AttendancePage() {
           </div>
         </div>
 
-        {/* DEMOGRAPHIC BREAKDOWN - NEW SECTION */}
+        {/* Demographic Breakdown */}
         <div className="bg-gradient-to-r from-brand-primary/5 to-brand-secondary/5 rounded-xl shadow-sm p-6 border-2 border-brand-primary">
-          <h2 className="font-heading text-xl font-black text-brand-primary mb-4 flex items-center gap-2">
-            <Users size={24} />
+          <h2 className="font-heading text-xl font-black text-brand-primary mb-6">
             Attendance Breakdown by Category
           </h2>
 
-          <p className="text-sm text-brand-dark-light mb-6">
-            Enter the number of people in each category. The total will be
-            calculated automatically.
-          </p>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Men */}
-            <div className="bg-white rounded-lg p-4 border-2 border-brand-sky hover:border-brand-primary transition-colors">
+            <div className="bg-white rounded-lg p-4 border-2 border-brand-sky">
               <label className="block text-sm font-bold text-brand-dark mb-2">
                 👨 Men
               </label>
@@ -315,12 +332,10 @@ export default function AttendancePage() {
                   })
                 }
                 className="w-full px-4 py-3 border-2 border-brand-sky rounded-lg focus:outline-none focus:border-brand-primary text-xl font-bold text-brand-primary text-center"
-                placeholder="0"
               />
             </div>
 
-            {/* Women */}
-            <div className="bg-white rounded-lg p-4 border-2 border-brand-sky hover:border-brand-primary transition-colors">
+            <div className="bg-white rounded-lg p-4 border-2 border-brand-sky">
               <label className="block text-sm font-bold text-brand-dark mb-2">
                 👩 Women
               </label>
@@ -335,12 +350,10 @@ export default function AttendancePage() {
                   })
                 }
                 className="w-full px-4 py-3 border-2 border-brand-sky rounded-lg focus:outline-none focus:border-brand-primary text-xl font-bold text-brand-primary text-center"
-                placeholder="0"
               />
             </div>
 
-            {/* Youths */}
-            <div className="bg-white rounded-lg p-4 border-2 border-brand-sky hover:border-brand-primary transition-colors">
+            <div className="bg-white rounded-lg p-4 border-2 border-brand-sky">
               <label className="block text-sm font-bold text-brand-dark mb-2">
                 🧑 Youths
               </label>
@@ -355,12 +368,10 @@ export default function AttendancePage() {
                   })
                 }
                 className="w-full px-4 py-3 border-2 border-brand-sky rounded-lg focus:outline-none focus:border-brand-primary text-xl font-bold text-brand-primary text-center"
-                placeholder="0"
               />
             </div>
 
-            {/* Children */}
-            <div className="bg-white rounded-lg p-4 border-2 border-brand-sky hover:border-brand-primary transition-colors">
+            <div className="bg-white rounded-lg p-4 border-2 border-brand-sky">
               <label className="block text-sm font-bold text-brand-dark mb-2">
                 👶 Children
               </label>
@@ -375,12 +386,10 @@ export default function AttendancePage() {
                   })
                 }
                 className="w-full px-4 py-3 border-2 border-brand-sky rounded-lg focus:outline-none focus:border-brand-primary text-xl font-bold text-brand-primary text-center"
-                placeholder="0"
               />
             </div>
           </div>
 
-          {/* Total Display */}
           <div className="mt-6 p-6 bg-brand-primary rounded-lg text-white">
             <div className="flex items-center justify-between">
               <div>
@@ -401,18 +410,12 @@ export default function AttendancePage() {
           </div>
         </div>
 
-        {/* Registered Members Checklist */}
+        {/* Registered Members */}
         <div className="bg-white rounded-xl shadow-sm p-6">
           <h2 className="font-heading text-xl font-black text-brand-primary mb-4 pb-3 border-b-2 border-brand-sky">
             Mark Registered Members
           </h2>
 
-          <p className="text-sm text-brand-dark-light mb-6">
-            Check the registered members who were present today. Members marked
-            absent for 2 consecutive services will be flagged for follow-up.
-          </p>
-
-          {/* Search & Select All */}
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="flex-1 relative">
               <Search
@@ -439,79 +442,78 @@ export default function AttendancePage() {
             </button>
           </div>
 
-          {/* Members List */}
           <div className="border-2 border-brand-sky rounded-lg p-4 max-h-96 overflow-y-auto">
-            {filteredMembers.length === 0 ? (
-              <p className="text-center text-brand-dark-light py-8">
-                No members found
-              </p>
-            ) : (
-              <div className="space-y-2">
-                {filteredMembers.map((member) => {
-                  const isSelected = selectedMembers.has(member._id);
+            {filteredMembers.map((member) => {
+              const isSelected = selectedMembers.has(member._id);
 
-                  return (
-                    <label
-                      key={member._id}
-                      className={`flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-colors ${
-                        isSelected
-                          ? "bg-brand-accent/10 border-2 border-brand-accent"
-                          : "bg-brand-light hover:bg-brand-sky border-2 border-transparent"
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => toggleMember(member._id)}
-                        className="w-5 h-5 text-brand-accent focus:ring-brand-accent border-brand-sky rounded"
-                      />
+              return (
+                <label
+                  key={member._id}
+                  className={`flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-colors mb-2 ${
+                    isSelected
+                      ? "bg-brand-accent/10 border-2 border-brand-accent"
+                      : "bg-brand-light hover:bg-brand-sky border-2 border-transparent"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => toggleMember(member._id)}
+                    className="w-5 h-5 text-brand-accent focus:ring-brand-accent border-brand-sky rounded"
+                  />
 
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3">
-                          <span className="font-bold text-brand-dark">
-                            {member.firstName} {member.lastName}
-                          </span>
-                          {member.serialNumber && (
-                            <span className="px-2 py-1 bg-brand-primary/10 text-brand-primary text-xs font-bold rounded">
-                              {member.serialNumber}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm text-brand-dark-light">
-                          {member.phoneNumber}
-                        </p>
-                      </div>
-
-                      {isSelected && (
-                        <CheckCircle className="text-brand-accent" size={24} />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <span className="font-bold text-brand-dark">
+                        {member.firstName} {member.lastName}
+                      </span>
+                      {member.serialNumber && (
+                        <span className="px-2 py-1 bg-brand-primary/10 text-brand-primary text-xs font-bold rounded">
+                          {member.serialNumber}
+                        </span>
                       )}
-                    </label>
-                  );
-                })}
-              </div>
-            )}
+                    </div>
+                    <p className="text-sm text-brand-dark-light">
+                      {member.phoneNumber}
+                    </p>
+                  </div>
+
+                  {isSelected && (
+                    <CheckCircle className="text-brand-accent" size={24} />
+                  )}
+                </label>
+              );
+            })}
           </div>
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={saving || totalPeoplePresent === 0}
-          className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-brand-primary text-white font-bold rounded-lg hover:bg-brand-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {saving ? (
-            <>
-              <Loader className="animate-spin" size={20} />
-              Saving Attendance...
-            </>
-          ) : (
-            <>
-              <Save size={20} />
-              Save Attendance (Total: {totalPeoplePresent}, Registered:{" "}
-              {registeredPresent})
-            </>
-          )}
-        </button>
+        <div className="flex gap-4">
+          <button
+            type="submit"
+            disabled={saving || totalPeoplePresent === 0}
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-brand-primary text-white font-bold rounded-lg hover:bg-brand-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {saving ? (
+              <>
+                <Loader className="animate-spin" size={20} />
+                Updating...
+              </>
+            ) : (
+              <>
+                <Save size={20} />
+                Update Attendance
+              </>
+            )}
+          </button>
+
+          <Link
+            href="/admin/attendance/history"
+            className="px-6 py-4 border-2 border-brand-primary text-brand-primary font-bold rounded-lg hover:bg-brand-primary hover:text-white transition-colors text-center"
+          >
+            Cancel
+          </Link>
+        </div>
       </form>
     </div>
   );

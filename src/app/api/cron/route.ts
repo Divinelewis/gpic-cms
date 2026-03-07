@@ -8,11 +8,25 @@ import {
   getSundayReminderMessage,
 } from "@/lib/sms";
 
+// Support both GET (Vercel Cron) and POST (manual testing)
+export async function GET(request: NextRequest) {
+  return handleCronRequest(request);
+}
+
 export async function POST(request: NextRequest) {
+  return handleCronRequest(request);
+}
+
+async function handleCronRequest(request: NextRequest) {
   try {
-    // Verify cron secret to prevent unauthorized access
-    const authHeader = request.headers.get("authorization");
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    // Verify cron secret - check multiple header formats
+    const cronSecret =
+      request.headers.get("x-cron-secret") || // Custom header
+      request.headers.get("authorization")?.replace("Bearer ", "") || // Bearer token
+      "";
+
+    if (!cronSecret || cronSecret !== process.env.CRON_SECRET) {
+      console.error("[CRON] Unauthorized access attempt");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -20,6 +34,8 @@ export async function POST(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const job = searchParams.get("job");
+
+    console.log(`[CRON] Job started: ${job} at ${new Date().toISOString()}`);
 
     let result: any = {};
 
@@ -38,14 +54,18 @@ export async function POST(request: NextRequest) {
 
       default:
         return NextResponse.json(
-          { error: "Invalid job type" },
+          {
+            error:
+              "Invalid job type. Use: send-sunday-reminders, send-activity-reminders, or delete-expired-activities",
+          },
           { status: 400 },
         );
     }
 
+    console.log(`[CRON] Job completed:`, result);
     return NextResponse.json(result);
   } catch (error: any) {
-    console.error("Cron job error:", error);
+    console.error("[CRON] Error:", error);
     return NextResponse.json(
       { error: error.message || "Cron job failed" },
       { status: 500 },
@@ -57,6 +77,8 @@ export async function POST(request: NextRequest) {
  * Delete activities that have passed
  */
 async function deleteExpiredActivities() {
+  console.log("[CRON] Deleting expired activities...");
+
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   yesterday.setHours(23, 59, 59, 999);
@@ -64,6 +86,8 @@ async function deleteExpiredActivities() {
   const result = await Activity.deleteMany({
     activityDate: { $lt: yesterday },
   });
+
+  console.log(`[CRON] Deleted ${result.deletedCount} expired activities`);
 
   return {
     job: "delete-expired-activities",
@@ -73,10 +97,11 @@ async function deleteExpiredActivities() {
 }
 
 /**
- * Send reminders for activities happening tomorrow (afternoon)
+ * Send reminders for activities happening tomorrow (at 2 PM daily)
  */
 async function sendActivityReminders() {
-  // Get tomorrow's date range
+  console.log("[CRON] Checking for tomorrow's activities...");
+
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
@@ -84,7 +109,6 @@ async function sendActivityReminders() {
   const tomorrowEnd = new Date(tomorrow);
   tomorrowEnd.setHours(23, 59, 59, 999);
 
-  // Find activities happening tomorrow that haven't been reminded yet
   const activities = await Activity.find({
     activityDate: {
       $gte: tomorrow,
@@ -95,6 +119,7 @@ async function sendActivityReminders() {
   });
 
   if (activities.length === 0) {
+    console.log("[CRON] No activities scheduled for tomorrow");
     return {
       job: "send-activity-reminders",
       message: "No activities to remind about",
@@ -102,16 +127,28 @@ async function sendActivityReminders() {
     };
   }
 
-  // Get all active members
-  const members = await Member.find({ isActive: true }).select(
-    "phoneNumber firstName",
-  );
-  const phoneNumbers = members.map((m) => m.phoneNumber);
+  console.log(`[CRON] Found ${activities.length} activities for tomorrow`);
 
-  let totalSent = 0;
+  const members = await Member.find({
+    isActive: true,
+    phoneNumber: { $exists: true, $ne: "" },
+  }).select("phoneNumber firstName");
+
+  if (members.length === 0) {
+    console.log("[CRON] No active members with phone numbers");
+    return {
+      job: "send-activity-reminders",
+      message: "No active members to notify",
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  const phoneNumbers = members.map((m) => m.phoneNumber);
+  console.log(`[CRON] Sending to ${phoneNumbers.length} members`);
+
+  let totalSuccessful = 0;
   let totalFailed = 0;
 
-  // Send reminder for each activity
   for (const activity of activities) {
     const message = getActivityReminderMessage(
       activity.title,
@@ -120,21 +157,23 @@ async function sendActivityReminders() {
       activity.location,
     );
 
+    console.log(`[CRON] Sending reminder for: ${activity.title}`);
     const result = await sendBulkSMS(phoneNumbers, message);
-    totalSent += result.sent;
+
+    totalSuccessful += result.successful;
     totalFailed += result.failed;
 
-    // Mark activity as reminded
     activity.reminderSent = true;
     await activity.save();
+    console.log(`[CRON] Marked ${activity.title} as reminded`);
   }
 
   return {
     job: "send-activity-reminders",
     activitiesCount: activities.length,
     membersCount: members.length,
-    totalSent,
-    totalFailed,
+    sent: totalSuccessful,
+    failed: totalFailed,
     timestamp: new Date().toISOString(),
   };
 }
@@ -143,11 +182,16 @@ async function sendActivityReminders() {
  * Send Sunday service reminders (Every Saturday at noon)
  */
 async function sendSundayReminders() {
-  // Get all active members
-  const members = await Member.find({ isActive: true }).select("phoneNumber");
-  const phoneNumbers = members.map((m) => m.phoneNumber);
+  console.log("[CRON] Sending Sunday service reminders...");
 
-  if (phoneNumbers.length === 0) {
+  // Get all active members with phone numbers
+  const members = await Member.find({
+    isActive: true,
+    phoneNumber: { $exists: true, $ne: "" },
+  }).select("phoneNumber");
+
+  if (members.length === 0) {
+    console.log("[CRON] No active members with phone numbers");
     return {
       job: "send-sunday-reminders",
       message: "No active members to send reminders",
@@ -155,13 +199,20 @@ async function sendSundayReminders() {
     };
   }
 
+  const phoneNumbers = members.map((m) => m.phoneNumber);
+  console.log(`[CRON] Sending to ${phoneNumbers.length} members`);
+
   const message = getSundayReminderMessage();
   const result = await sendBulkSMS(phoneNumbers, message);
+
+  console.log(
+    `[CRON] Sunday reminders sent: ${result.successful} successful, ${result.failed} failed`,
+  );
 
   return {
     job: "send-sunday-reminders",
     membersCount: members.length,
-    sent: result.sent,
+    sent: result.successful,
     failed: result.failed,
     timestamp: new Date().toISOString(),
   };

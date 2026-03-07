@@ -51,7 +51,7 @@ export async function sendSMS(
     }
 
     const formattedPhone = formatPhoneNumber(phoneNumber);
-    console.log(`Sending SMS to: ${formattedPhone}`);
+    console.log(`[SMS] Sending to: ${formattedPhone}`);
 
     const payload = {
       to: formattedPhone,
@@ -61,11 +61,6 @@ export async function sendSMS(
       api_key: TERMII_CONFIG.API_KEY,
       channel: "generic",
     };
-
-    console.log("Termii Request:", {
-      ...payload,
-      api_key: "***hidden***",
-    });
 
     const response = await fetch(
       `${TERMII_CONFIG.BASE_URL}${TERMII_CONFIG.ENDPOINT}`,
@@ -79,7 +74,7 @@ export async function sendSMS(
     );
 
     const data = await response.json();
-    console.log("Termii Response:", data);
+    console.log("[SMS] Termii Response:", data);
 
     if (data.message_id || data.code === "ok") {
       return {
@@ -95,7 +90,7 @@ export async function sendSMS(
       };
     }
   } catch (error: any) {
-    console.error("SMS Error:", error);
+    console.error("[SMS] Error:", error);
 
     let errorMessage = "Failed to send SMS";
 
@@ -116,55 +111,61 @@ export async function sendSMS(
 
 /**
  * Send Bulk SMS
+ * Returns: { successful, failed } to match what cron route expects
  */
 export async function sendBulkSMS(
   phoneNumbers: string[],
   message: string,
-): Promise<{ total: number; sent: number; failed: number; errors: string[] }> {
-  let sent = 0;
+): Promise<{ successful: number; failed: number }> {
+  let successful = 0;
   let failed = 0;
-  const errors: string[] = [];
 
-  console.log(`Starting bulk SMS to ${phoneNumbers.length} recipients`);
+  console.log(
+    `[BULK SMS] Starting bulk SMS to ${phoneNumbers.length} recipients`,
+  );
 
   for (const phone of phoneNumbers) {
     const result = await sendSMS(phone, message);
 
     if (result.success) {
-      sent++;
+      successful++;
+      console.log(`[BULK SMS] ✓ Sent to ${phone}`);
     } else {
       failed++;
-      errors.push(`${phone}: ${result.message}`);
+      console.error(
+        `[BULK SMS] ✗ Failed to send to ${phone}: ${result.message}`,
+      );
     }
 
+    // Delay between messages to avoid rate limiting
     await new Promise((resolve) => setTimeout(resolve, 300));
   }
 
-  console.log(`Bulk SMS completed: ${sent} sent, ${failed} failed`);
+  console.log(
+    `[BULK SMS] Completed: ${successful} successful, ${failed} failed`,
+  );
 
   return {
-    total: phoneNumbers.length,
-    sent,
+    successful,
     failed,
-    errors,
   };
 }
 
 /**
- * Welcome message
+ * Welcome message for first-time members
  */
 export function getWelcomeMessage(firstName: string): string {
   return `Dear ${firstName},
 
 We are thrilled to have you as part of the Gospel Power International Church (GPIC) family. We look forward to seeing more of you.
 
-We’re truly happy to have you with us. May this be a place where you grow in faith and experience God’s grace.
+We're truly happy to have you with us. May this be a place where you grow in faith and experience God's grace.
 
 God bless you!`;
 }
 
 /**
- * Activity reminder
+ * Activity reminder message
  */
 export function getActivityReminderMessage(
   activityTitle: string,
@@ -194,12 +195,12 @@ God bless!`;
 }
 
 /**
- * Sunday service reminder
+ * Sunday service reminder (sent on Saturday)
  */
 export function getSundayReminderMessage(): string {
   return `GPIC Sunday Service Reminder
 
-Join us tomorrow for a powerful time in God’s presence.
+Join us tomorrow for a powerful time in God's presence.
 
 Time: 7:00 AM Prompt
 Location: Church Auditorium, Opp. Highbrow School, Okemini Sars Rd, Rumuaghorlu, Port Harcourt.
