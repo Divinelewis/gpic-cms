@@ -71,7 +71,7 @@ export default function HeroSlider() {
           />
 
           {/* DARK OVERLAY — adjust /90 to control darkness */}
-          <div className="absolute inset-0 bg-black/90"></div>
+          <div className="absolute inset-0 bg-black/85"></div>
 
           {/* Content */}
           <div className="relative z-10 h-full flex items-center justify-center text-center px-6 pointer-events-auto">
