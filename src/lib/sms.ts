@@ -161,7 +161,9 @@ We are thrilled to have you as part of the Gospel Power International Church (GP
 
 We're truly happy to have you with us. May this be a place where you grow in faith and experience God's grace.
 
-God bless you!`;
+God bless you!
+
+For more information about us, visit: https://gpicworldwide.org`;
 }
 
 /**
@@ -189,7 +191,7 @@ Location: ${location}
 
 We can't wait to see you there!
 
-For more details, contact us via: +23480367515669
+For more details, contact us via: +23480367515669 or visit https://gpicworldwide.org
 
 God bless!`;
 }

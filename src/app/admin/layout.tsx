@@ -269,7 +269,7 @@ export default function AdminLayout({
             <p>
               © 2026 Gospel Power International Church. All rights reserved.
             </p>
-            <p className="font-medium">Built with ❤️ for ministry</p>
+            {/* <p className="font-medium">Built with ❤️ for ministry by Divinity</p> */}
           </div>
         </footer>
       </div>

@@ -32,11 +32,11 @@ import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
 
 export const metadata: Metadata = {
-  title: "GPIC - Greater Purpose International Church",
+  title: "GPIC - Gospel Power International Church",
   description:
-    "GPIC is not just a space, it is an experience. A series of impactful and transformational encounters that bring change to the lives of people.",
+    "GPIC is not just a Church, it is an experience. A series of impactful and transformational encounters that bring change to the lives of people.",
   keywords:
-    "church, GPIC, Greater Purpose, spiritual growth, transformation, worship",
+    "church, GPIC, Gospel Power, Gospel Power International Church, spiritual growth, transformation, praise, worship",
 };
 
 export default function RootLayout({
