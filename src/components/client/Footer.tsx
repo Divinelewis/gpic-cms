@@ -326,16 +326,18 @@ export default function Footer() {
               {/* Social Media */}
               <div className="flex space-x-4">
                 <a
-                  href="#"
+                  href="https://www.facebook.com/GospelPowerInternationalChurch"
                   className="w-11 h-11 border border-white/20 hover:border-brand-secondary rounded-full flex items-center justify-center transition-all duration-300 hover:bg-brand-secondary/10"
                   aria-label="Facebook"
                 >
                   <Facebook size={20} className="text-white" />
                 </a>
                 <a
-                  href="#"
+                  href="https://www.tiktok.com/@gospel.power.intl?is_from_webapp=1&sender_device=pc"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-11 h-11 border border-white/20 hover:border-brand-secondary rounded-full flex items-center justify-center transition-all duration-300 hover:bg-brand-secondary/10"
-                  aria-label="Twitter"
+                  aria-label="TikTok"
                 >
                   <svg
                     className="w-5 h-5 text-white"
@@ -343,7 +345,7 @@ export default function Footer() {
                     viewBox="0 0 24 24"
                     aria-hidden="true"
                   >
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-1.88V16.03a5.273 5.273 0 1 1-5.273-5.273c.148 0 .293.013.435.03v2.63a2.65 2.65 0 1 0 1.87 2.53V2.25h2.968a4.79 4.79 0 0 0 3.77 4.436v0z" />
                   </svg>
                 </a>
                 <a
