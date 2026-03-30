@@ -257,7 +257,7 @@ export default function NewcomerPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
-                  href="tel:+23480367515669"
+                  href="tel:+2348036751669"
                   className="group flex items-center justify-center gap-3 px-8 py-4 bg-white border-2 border-brand-primary text-brand-primary font-bold rounded-xl hover:bg-brand-primary hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                 >
                   <svg
@@ -276,7 +276,7 @@ export default function NewcomerPage() {
                   <span>Call Us Now</span>
                 </a>
                 <a
-                  href="https://wa.me/23480367515669"
+                  href="https://wa.me/2348036751669"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white font-bold rounded-xl hover:from-green-700 hover:to-green-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
@@ -407,7 +407,7 @@ export default function NewcomerPage() {
                 </p>
 
                 {/* Arrow Icon */}
-                <div className="mt-6 relative">
+                {/* <div className="mt-6 relative">
                   <div className="inline-flex items-center text-brand-accent font-bold text-sm group-hover:translate-x-2 transition-transform duration-300">
                     Learn more
                     <svg
@@ -424,7 +424,7 @@ export default function NewcomerPage() {
                       />
                     </svg>
                   </div>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>

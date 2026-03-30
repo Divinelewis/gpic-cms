@@ -292,7 +292,7 @@ export default function Footer() {
                     className="flex-shrink-0 text-brand-secondary"
                   />
                   <span className="text-sm text-white/80 font-sans">
-                    +234 (080) 367-515-669
+                    +234 (080) 367-51-669
                   </span>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -301,7 +301,7 @@ export default function Footer() {
                     className="flex-shrink-0 text-brand-secondary"
                   />
                   <span className="text-sm text-white/80 font-sans">
-                    info@gpic.org
+                    gospelpowerchurch07@gmail.com
                   </span>
                 </div>
               </div>
