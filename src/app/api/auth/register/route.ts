@@ -20,11 +20,22 @@ export async function POST(req: Request) {
       );
     }
 
+    // CHECK 1: Check if this email already exists
     const existingAdmin = await Admin.findOne({ email });
 
-    if (existingAdmin) {
+    if (existingAdmin) {  // ✅ FIXED - Check if admin exists (not > 1)
       return NextResponse.json(
-        { message: "Admin already exists" },
+        { message: "Admin with this email already exists" },
+        { status: 400 },
+      );
+    }
+
+    // CHECK 2: Count total admins - limit to 2 max
+    const totalAdmins = await Admin.countDocuments();
+
+    if (totalAdmins >= 2) {  // NEW - Limit to 2 admins
+      return NextResponse.json(
+        { message: "Maximum number of admins (2) reached" },
         { status: 400 },
       );
     }
@@ -41,7 +52,7 @@ export async function POST(req: Request) {
       { status: 201 },
     );
   } catch (error) {
-    console.error("🔥 REGISTER ERROR:", error);
+    console.error("REGISTER ERROR:", error);
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
