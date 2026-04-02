@@ -152,7 +152,7 @@ export default function Footer() {
             {/* Quick Links */}
             <div className="space-y-4">
               <h3 className="font-heading text-lg font-bold tracking-tight mb-4">
-                QUICKLINKS
+                QUICK LINKS
               </h3>
               <ul className="space-y-3 font-sans text-sm">
                 <li>
@@ -177,6 +177,14 @@ export default function Footer() {
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Ministries
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/newcomer"
+                    className="text-white/80 hover:text-brand-secondary transition-colors"
+                  >
+                    Become a Member
                   </Link>
                 </li>
               </ul>
