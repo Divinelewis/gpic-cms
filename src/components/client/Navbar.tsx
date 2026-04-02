@@ -12,6 +12,7 @@ const navLinks = [
   { name: "ABOUT US", href: "/about" },
   { name: "MINISTRIES", href: "/ministries" },
   { name: "LIVE STREAM", href: "/live" },
+  { name: "BECOME A MEMBER", href: "/newcomer" },
 ];
 
 export default function Navbar() {
