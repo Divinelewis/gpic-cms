@@ -255,7 +255,7 @@ export default function Footer() {
               <ul className="space-y-3 font-sans text-sm mb-6">
                 <li>
                   <Link
-                    href="#"
+                    href="/privacy"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Privacy Policy
