@@ -263,7 +263,7 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="#"
+                    href="/terms-of-service"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Terms of Service
@@ -271,7 +271,7 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="#"
+                    href="cookie-policy"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Cookie Policy
