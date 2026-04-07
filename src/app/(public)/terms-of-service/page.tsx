@@ -118,7 +118,7 @@ export default function TermsPage() {
 
                 <div className="space-y-3">
                   {[
-                    "You are at least 18 years old, or using with parental supervision",
+                    "You are of minimum legal adult age of your country or using with parental supervision",
                     "You have legal capacity to enter into these Terms",
                     "You will comply with all applicable laws",
                     "All information you provide is accurate and current",

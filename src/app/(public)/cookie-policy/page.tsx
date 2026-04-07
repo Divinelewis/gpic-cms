@@ -144,19 +144,16 @@ export default function CookiePolicyPage() {
                       features like:
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      {[
-                        "Security",
-                        "Authentication",
-                        "Preferences",
-                        "Performance",
-                      ].map((tag, i) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1 bg-green-50 text-green-700 text-xs font-semibold rounded-lg"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                      {["Security", "Preferences", "Performance"].map(
+                        (tag, i) => (
+                          <span
+                            key={i}
+                            className="px-3 py-1 bg-green-50 text-green-700 text-xs font-semibold rounded-lg"
+                          >
+                            {tag}
+                          </span>
+                        ),
+                      )}
                     </div>
                     <p className="text-xs text-green-700 mt-3 font-semibold flex items-center gap-2">
                       <AlertTriangle className="w-4 h-4" />
@@ -165,7 +162,6 @@ export default function CookiePolicyPage() {
                   </div>
                 </div>
               </div>
-
               {/* Analytics */}
               <div className="bg-white border-2 border-blue-200 rounded-2xl p-6 hover:shadow-lg transition-shadow">
                 <div className="flex items-start gap-4">
@@ -198,8 +194,7 @@ export default function CookiePolicyPage() {
                     </ul>
                     <div className="mt-3 p-3 bg-blue-50 rounded-lg">
                       <p className="text-xs text-blue-700">
-                        <strong>Tools:</strong> Google Analytics, Vercel
-                        Analytics
+                        <strong>Tools:</strong> Google Analytics
                       </p>
                     </div>
                   </div>
@@ -220,20 +215,18 @@ export default function CookiePolicyPage() {
                       Remember your choices for enhanced features:
                     </p>
                     <div className="grid md:grid-cols-3 gap-2">
-                      {[
-                        "Language preference",
-                        "Login info (admin)",
-                        "Custom content",
-                      ].map((item, i) => (
-                        <div
-                          key={i}
-                          className="p-3 bg-purple-50 rounded-lg text-center"
-                        >
-                          <p className="text-xs text-purple-900 font-semibold">
-                            {item}
-                          </p>
-                        </div>
-                      ))}
+                      {["Language preference", "Custom content"].map(
+                        (item, i) => (
+                          <div
+                            key={i}
+                            className="p-3 bg-purple-50 rounded-lg text-center"
+                          >
+                            <p className="text-xs text-purple-900 font-semibold">
+                              {item}
+                            </p>
+                          </div>
+                        ),
+                      )}
                     </div>
                   </div>
                 </div>
