@@ -238,7 +238,7 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link
-                    href="#"
+                    href="/just-accepted-christ"
                     className="text-white/80 hover:text-brand-secondary transition-colors"
                   >
                     Just Accepted Christ?
