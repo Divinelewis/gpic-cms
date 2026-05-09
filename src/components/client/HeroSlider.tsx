@@ -29,7 +29,7 @@ const slides = [
   {
     id: 3,
     video: "",
-    image: "images/frame2.jpg",
+    image: "images/frame1.jpg",
     badge: "Join Us",
     line1: "DISCOVER YOUR",
     line2: "DIVINE PURPOSE",
