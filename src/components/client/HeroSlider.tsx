@@ -8,25 +8,28 @@ import { useRouter } from "next/navigation";
 const slides = [
   {
     id: 1,
-    image: "images/frame1.png",
-    badge: "Our Vision",
-    line1: "WE ENVISION ALL MEN",
-    line2: "CELEBRATING ENDLESS",
-    highlight: "LIFE IN CHRIST",
+    video: "/images/intro.mp4",
+    image: "",
+    badge: "Experience God",
+    line1: "A PLACE OF POWER",
+    line2: "FAITH & WORSHIP",
+    highlight: "TRANSFORMATION",
   },
   // https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=2070&auto=format&fit=crop
   // https://images.unsplash.com/photo-1473172707857-f9e276582ab6?q=80&w=2070&auto=format&fit=crop
   {
     id: 2,
-    image: "images/frame1.png",
-    badge: "Experience God",
-    line1: "A PLACE OF POWER",
-    line2: "FAITH AND WORSHIP",
-    highlight: "TRANSFORMATION",
+    video: "",
+    image: "images/frame3.jpg",
+    badge: "Our Vision",
+    line1: "WE ENVISION ALL MEN",
+    line2: "CELEBRATING ENDLESS",
+    highlight: "LIFE IN CHRIST",
   },
   {
     id: 3,
-    image: "images/frame1.png",
+    video: "",
+    image: "images/frame2.jpg",
     badge: "Join Us",
     line1: "DISCOVER YOUR",
     line2: "DIVINE PURPOSE",
@@ -40,11 +43,14 @@ export default function HeroSlider() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
+    const currentDuration = currentSlide === 0 ? 40000 : 12000;
+
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 12000);
+    }, currentDuration);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [currentSlide]);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
 
@@ -63,12 +69,24 @@ export default function HeroSlider() {
           className="absolute inset-0 pointer-events-none"
         >
           {/* Background Image */}
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: `url(${slides[currentSlide].image})`,
-            }}
-          />
+          {slides[currentSlide].video ? (
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src={slides[currentSlide].video} type="video/mp4" />
+            </video>
+          ) : (
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: `url(${slides[currentSlide].image})`,
+              }}
+            />
+          )}
 
           {/* DARK OVERLAY — adjust /90 to control darkness */}
           <div className="absolute inset-0 bg-black/85"></div>
